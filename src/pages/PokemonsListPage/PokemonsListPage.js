@@ -5,7 +5,7 @@ import Header from '../../components/Header/Header'
 const PokemonsListPage = () => {
   return (
     <>
-    <Header/>
+    <Header isInOnPokemonsListPage = {true} />
     <Box w='100%' h={1000} bg={'gray.600'} padding="40px">
     <Heading 
     fontFamily="'Poppins', sans-serif"
