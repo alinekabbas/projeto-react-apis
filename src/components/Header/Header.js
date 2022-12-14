@@ -7,15 +7,15 @@ import {
   Heading,
   Image
 }
-  from '@chakra-ui/react'
-import React, { useState } from 'react'
+from '@chakra-ui/react'
+import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import logoPokemon from "../../assets/logoPokemon.png"
 import arrowIcon from "../../assets/arrowIcon.svg"
 import { goToPokedexPage, goToPokemonsListPage } from '../../Router/coordinator'
 
 const Header = (props) => {
-  const { isInOnPokemonsListPage, isInOnPokemonDetailsPage, isOnPokedexPage } = props
+  const { isOnPokemonsListPage, isInOnPokemonDetailsPage, isOnPokedexPage } = props
 
   const navigate = useNavigate()
 
@@ -27,8 +27,7 @@ const Header = (props) => {
       alignItems='center'
       justifyItems='center'
     >
-      
-        {isOnPokedexPage &&
+      {isOnPokedexPage &&
         <GridItem gridColumn={'1/2'} gridRow={'2/3'}>
           <Flex w='240px' >
             <Image src={arrowIcon} alt='Arrow Icon' />
@@ -39,11 +38,9 @@ const Header = (props) => {
               textDecoration='underline'
             >Todos Pokémons</Heading>
           </Flex>
-          </GridItem>}
-      
+        </GridItem>}
 
-      
-        {isInOnPokemonDetailsPage &&
+      {isInOnPokemonDetailsPage &&
         <GridItem gridRow={'2/3'}>
           <Flex w='240px' >
             <Image src={arrowIcon} alt='Arrow Icon' />
@@ -54,9 +51,7 @@ const Header = (props) => {
               textDecoration='underline'
             >Todos Pokémons</Heading>
           </Flex>
-          </GridItem>}
-      
-
+        </GridItem>}
 
       <GridItem gridColumn={'2 / 4'} gridRow={'2/3'}>
         <Image
@@ -67,35 +62,31 @@ const Header = (props) => {
         />
       </GridItem>
 
-      
-      {isInOnPokemonsListPage &&
-      <GridItem gridColumn={'4 / 5'} gridRow={'2/3'}>
-        <Button onClick={() => goToPokedexPage(navigate)}
-          colorScheme={'blue'}
-          w="250px"
-          h="74px"
-          padding="4px 20px"
-          fontFamily="'Poppins', sans-serif"
-          fontWeight="700"
-          fontSize='24px'
-        >Pokédex</Button>
+      {isOnPokemonsListPage &&
+        <GridItem gridColumn={'4 / 5'} gridRow={'2/3'}>
+          <Button onClick={() => goToPokedexPage(navigate)}
+            colorScheme={'blue'}
+            w="250px"
+            h="74px"
+            padding="4px 20px"
+            fontFamily="'Poppins', sans-serif"
+            fontWeight="700"
+            fontSize='24px'
+          >Pokédex</Button>
         </GridItem>}
-      
 
-      
-        {isInOnPokemonDetailsPage && 
+      {isInOnPokemonDetailsPage &&
         <GridItem gridColumn={'4 / 5'} gridRow={'2/3'}>
           <Button
-          colorScheme={'red'}
-          w="250px"
-          h="74px"
-          padding="4px 20px"
-          fontFamily="'Poppins', sans-serif"
-          fontWeight="400"
-          fontSize='16px'
-        >Excluir da Pokédex</Button>
+            colorScheme={'red'}
+            w="250px"
+            h="74px"
+            padding="4px 20px"
+            fontFamily="'Poppins', sans-serif"
+            fontWeight="400"
+            fontSize='16px'
+          >Excluir da Pokédex</Button>
         </GridItem>}
-      
     </Grid>
   )
 }
