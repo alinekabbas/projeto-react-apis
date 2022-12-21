@@ -5,33 +5,33 @@ export const getColors = (type) => {
       case "dark":
         return "#5C5365";
       case "dragon":
-        return "#0A6CBF";
+        return "#7038f8";
       case "electric":
-        return "#F4D23B";
+        return "#e8c02e";
       case "fairy":
-        return "#EC8FE6";
+        return "#ee99ac";
       case "fighting":
-        return "#CE4069";
+        return "#d67873";
       case "fire":
         return "#EAAB7D";
       case "flying":
         return "#6892B0";
       case "ghost":
-        return "#5269AC";
+        return "#705898";
       case "grass":
         return "#729F92";
       case "ground":
-        return "#D97745";
+        return "#e4c26a";
       case "ice":
-        return "#74CEC0";
+        return "#98d8d8";
       case "normal":
         return "#BF9762";
       case "poison":
-        return "#AD61AE";
+        return "#c183c1";
       case "psychic":
-        return "#F67176";
+        return "#a13959";
       case "rock":
-        return "#C7B78B";
+        return "#d1c17d";
       case "steel":
         return "#BBBBBB";
       case "water":
