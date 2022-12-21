@@ -9,15 +9,15 @@ import {
 }
 from '@chakra-ui/react'
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import logoPokemon from "../../assets/logoPokemon.png"
 import arrowIcon from "../../assets/arrowIcon.svg"
 import { goToPokedexPage, goToPokemonsListPage } from '../../Router/coordinator'
 
-const Header = (props) => {
-  const { isOnPokemonsListPage, isInOnPokemonDetailsPage, isOnPokedexPage } = props
-
+const Header = () => {
   const navigate = useNavigate()
+
+  const location = useLocation()
 
   return (
     <Grid
@@ -27,7 +27,7 @@ const Header = (props) => {
       alignItems='center'
       justifyItems='center'
     >
-      {isOnPokedexPage &&
+      {location.pathname === '/pokedex' &&
         <GridItem gridColumn={'1/2'} gridRow={'2/3'}>
           <Flex w='240px' >
             <Image src={arrowIcon} alt='Arrow Icon' />
@@ -40,7 +40,7 @@ const Header = (props) => {
           </Flex>
         </GridItem>}
 
-      {isInOnPokemonDetailsPage &&
+      {location.pathname === '/pokedex/id' &&
         <GridItem gridRow={'2/3'}>
           <Flex w='240px' >
             <Image src={arrowIcon} alt='Arrow Icon' />
@@ -62,7 +62,7 @@ const Header = (props) => {
         />
       </GridItem>
 
-      {isOnPokemonsListPage &&
+      {location.pathname === '/' &&
         <GridItem gridColumn={'4 / 5'} gridRow={'2/3'}>
           <Button onClick={() => goToPokedexPage(navigate)}
             colorScheme={'blue'}
@@ -75,7 +75,7 @@ const Header = (props) => {
           >Pokédex</Button>
         </GridItem>}
 
-      {isInOnPokemonDetailsPage &&
+      {location.pathname === '/pokedex/id' &&
         <GridItem gridColumn={'4 / 5'} gridRow={'2/3'}>
           <Button
             colorScheme={'red'}

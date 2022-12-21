@@ -8,10 +8,9 @@ const PokedexPage = () => {
   const context = useContext(GlobalContext)
   const { pokedex, removePokedex } = context
 
-
   return (
     <>
-      <Header isOnPokedexPage={true} />
+      <Header/>
       <Box w='100%' h={1000} bg={'gray.600'} padding="40px">
         <Heading
           fontFamily="'Poppins', sans-serif"
@@ -20,7 +19,10 @@ const PokedexPage = () => {
           color={'white'}
         >
           Meus Pokémons</Heading>
-        <Grid>
+        <Grid
+          templateColumns='repeat(3, 1fr)'
+          gap={10}
+          paddingTop='50px'>
           {pokedex.map((pokemon)=>{
             return <PokemonCard 
             key={pokemon.name}

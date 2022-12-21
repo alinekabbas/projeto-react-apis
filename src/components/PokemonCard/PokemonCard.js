@@ -1,28 +1,45 @@
-import { Button, Flex, Heading, HStack, Image, Text, VStack } from '@chakra-ui/react'
+import {
+  Button,
+  Flex,
+  HStack,
+  Image,
+  Modal,
+  ModalBody,
+  Text,
+  useDisclosure,
+  VStack
+}
+  from '@chakra-ui/react'
 import React, { useEffect, useState } from 'react'
 import axios from 'axios'
 import pokeball from '../../assets/pngwing2.png'
+import { useLocation, useNavigate } from 'react-router-dom'
+import { goToPokemonDetailPage } from '../../Router/coordinator'
+import { getTypes } from '../../utils/ReturnPokemonType'
+import { getColors } from '../../utils/ReturnCardColor'
 
 
 const PokemonCard = (props) => {
   const {
-    pokemon,
-    isOnPokemonsListPage,
-    isOnPokedexPage,
+    pokemonUrl,
     addToPokedex,
     removePokedex
   } = props
 
   const [pokemonDetail, setPokemonDetail] = useState({})
 
+  const navigate = useNavigate()
+
+  const location = useLocation()
+
   useEffect(() => {
     getPokemonDetails()
   }, [])
 
   const getPokemonDetails = () => {
-    axios.get(pokemon.url)
+    axios.get(pokemonUrl)
       .then((response) => {
-        console.log(response.data)
+        //console.log(response.data)
         setPokemonDetail(response.data)
       })
       .catch((error) => {
@@ -30,6 +47,10 @@ const PokemonCard = (props) => {
       })
   }
 
+  // const usageModal = ()=>{
+  //   const {isOpen, onOpen, onClose} = useDisclosure()
+  // }
+ 
   return (
     <Flex
       w='400px'
@@ -37,7 +58,12 @@ const PokemonCard = (props) => {
       flexDirection='column'
       borderRadius='20px'
       position='relative'
-      bg={'green.400'}>
+      bg={pokemonDetail?.types?.map((type) => {
+        if(type.slot === 1){
+          return getColors(type.type.name)
+        }
+      })}
+      >
       <Flex
         h='160px'
         justifyContent='space-between'>
@@ -45,30 +71,35 @@ const PokemonCard = (props) => {
           w='200px'
           alignItems='start'
           padding='16px'
-          >
-          <Text 
-          color='white'
-          fontSize='16px'
-          fontFamily="Inter, sans serif"
-          fontWeight='700'
+        >
+          <Text
+            color='white'
+            fontSize='16px'
+            fontFamily="Inter, sans serif"
+            fontWeight='700'
           >#{pokemonDetail.id}</Text>
-          <Heading
+          <Text
             fontFamily="Inter, sans serif"
             fontSize='32px'
             fontWeight='700'
             color='white'>
-            {pokemon.name[0].toUpperCase() + pokemon.name.substring(1)}
-          </Heading>
+            {pokemonDetail.name}
+          </Text>
           <HStack>
-            {/* <Text>{pokemonDetail.types[0].type.name}</Text>
-            <Text>{pokemonDetail.types[1].type.name}</Text> */}
+            {pokemonDetail?.types?.filter((type) => {
+              return(type)
+            }).map((type)=>{
+              return <Image key={type} src={getTypes(type.type.name)} alt='tipo pokémon' />
+            })
+            }
           </HStack>
         </VStack>
         <VStack
           w='200px'
           alignItems='center'
           justifyContent='center'
-          padding='16px'>
+          padding='16px'
+        >
           <Image
             src={pokemonDetail.sprites?.other['official-artwork'].front_default}
             alt='Imagem Pokemon'
@@ -81,8 +112,9 @@ const PokemonCard = (props) => {
           <Image
             src={pokeball}
             alt='Imagem Pokebola'
-            position='absolute' 
-            />
+            position='absolute'
+            w={'48'}
+          />
 
         </VStack>
       </Flex>
@@ -92,8 +124,8 @@ const PokemonCard = (props) => {
         justifyContent='space-between'
         alignItems='center'
         padding='0 24px'
-        >
-        <Text
+      >
+        <Text onClick={() => goToPokemonDetailPage(navigate)}
           textDecoration='underline'
           fontFamily="'Poppins', sans-serif"
           fontWeight="700"
@@ -103,8 +135,8 @@ const PokemonCard = (props) => {
           Detalhes
         </Text>
 
-        {isOnPokemonsListPage &&
-          <Button onClick={() => addToPokedex(pokemon)}
+        {location.pathname === '/' &&
+          <Button onClick={() => addToPokedex(pokemonDetail)}
             w='146px'
             h='38px'
             fontFamily="'Poppins', sans-serif"
@@ -112,13 +144,21 @@ const PokemonCard = (props) => {
             fontSize='16px'
           >Capturar!</Button>}
 
-        {isOnPokedexPage &&
-          <Button onClick={()=> removePokedex(pokemon)}
+        {/* <Modal>
+          <ModalBody>
+            <Text>Gotcha!</Text>
+            <Text>O Pokémon foi adicionado a sua Pokédex</Text>
+          </ModalBody>
+        </Modal> */}
+
+        {location.pathname === '/pokedex' &&
+          <Button onClick={() => removePokedex(pokemonDetail)}
             w='146px'
             h='38px'
             fontFamily="'Poppins', sans-serif"
             fontWeight="400"
             fontSize='16px'
+            colorScheme='red'
           >Excluir</Button>}
       </Flex>
     </Flex>

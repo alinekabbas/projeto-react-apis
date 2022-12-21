@@ -5,7 +5,7 @@ import { Box, Grid, Heading } from '@chakra-ui/react'
 const PokemonDetailPage = () => {
   return (
     <>
-    <Header isInOnPokemonDetailsPage = {true}/>
+    <Header/>
     <Box w='100%' h={1000} bg={'gray.600'} padding="40px">
     <Heading 
     fontFamily="'Poppins', sans-serif"

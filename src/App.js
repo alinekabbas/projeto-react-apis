@@ -15,7 +15,7 @@ function App() {
   }, [])
 
   const getPokemons = () => {
-    axios.get("https://pokeapi.co/api/v2/pokemon?limit=100&offset=0")
+    axios.get("https://pokeapi.co/api/v2/pokemon?limit=151&offset=0")
       .then((response) => {
         //console.log(response.data.results)
         setPokemons(response.data.results)
@@ -26,16 +26,17 @@ function App() {
   }
 
   const addToPokedex = (pokemonToAdd) => {
-    const isOnPokedex = pokedex.find((pokemonInPokedex) => pokemonInPokedex.name === pokemonToAdd.name
-    )
+    const pokeInPokedex = [...pokedex]
+    const isOnPokedex = pokeInPokedex.find((pokemonInPokedex) => pokemonInPokedex.name === pokemonToAdd.name
+    );
     if (!isOnPokedex) {
-      const newPokedex = [...pokedex, pokemonToAdd]
+      const newPokedex = [...pokeInPokedex, pokemonToAdd]
       setPokedex(newPokedex)
     }
   }
 
   const removePokedex = (pokemonToRemove) => {
-    const newPokedex = pokedex.filter((pokemon) => pokemon.name !== pokemonToRemove.name)
+    const newPokedex = pokedex.filter((pokemon) => pokemon.name !== pokemonToRemove.name);
     setPokedex(newPokedex)
   }
 
