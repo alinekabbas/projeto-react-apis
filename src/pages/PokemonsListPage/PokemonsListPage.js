@@ -1,8 +1,9 @@
-import { Box, Flex, Grid, Heading } from '@chakra-ui/react'
+import { Box, Grid, Heading } from '@chakra-ui/react'
 import React, { useContext } from 'react'
 import Header from '../../components/Header/Header'
 import PokemonCard from '../../components/PokemonCard/PokemonCard'
 import { GlobalContext } from '../../contexts/GlobalStateContext'
+
 
 const PokemonsListPage = () => {
   const context = useContext(GlobalContext)
@@ -10,7 +11,7 @@ const PokemonsListPage = () => {
 
   return (
     <>
-      <Header isOnPokemonsListPage={true} />
+      <Header/>
       <Box
         w='100%'
         h='100%'
@@ -32,7 +33,7 @@ const PokemonsListPage = () => {
             return <PokemonCard
               isOnPokemonsListPage={true}
               key={pokemon.name}
-              pokemon={pokemon}
+              pokemonUrl={pokemon.url}
               addToPokedex={addToPokedex} />
           })}
         </Grid>
