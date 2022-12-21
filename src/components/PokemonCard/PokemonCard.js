@@ -5,6 +5,8 @@ import {
   Image,
   Modal,
   ModalBody,
+  ModalContent,
+  ModalOverlay,
   Text,
   useDisclosure,
   VStack
@@ -18,10 +20,10 @@ import { goToPokemonDetailPage } from '../../Router/coordinator'
 import { getTypes } from '../../utils/ReturnPokemonType'
 import { getColors } from '../../utils/ReturnCardColor'
 
-
 const PokemonCard = (props) => {
   const {
     pokemonUrl,
+    pokemonName,
     addToPokedex,
     removePokedex
   } = props
@@ -39,7 +41,6 @@ const PokemonCard = (props) => {
   const getPokemonDetails = () => {
     axios.get(pokemonUrl)
       .then((response) => {
-        //console.log(response.data)
         setPokemonDetail(response.data)
       })
       .catch((error) => {
@@ -47,23 +48,21 @@ const PokemonCard = (props) => {
       })
   }
 
-  // const usageModal = ()=>{
-  //   const {isOpen, onOpen, onClose} = useDisclosure()
-  // }
- 
+  const { isOpen, onOpen, onClose } = useDisclosure()
+
   return (
     <Flex
-      w='400px'
+      w='420px'
       h='210px'
       flexDirection='column'
       borderRadius='20px'
       position='relative'
       bg={pokemonDetail?.types?.map((type) => {
-        if(type.slot === 1){
+        if (type.slot === 1) {
           return getColors(type.type.name)
         }
       })}
-      >
+    >
       <Flex
         h='160px'
         justifyContent='space-between'>
@@ -77,18 +76,17 @@ const PokemonCard = (props) => {
             fontSize='16px'
             fontFamily="Inter, sans serif"
             fontWeight='700'
-          >#{pokemonDetail.id}</Text>
+          >#{pokemonDetail.id}
+          </Text>
           <Text
             fontFamily="Inter, sans serif"
             fontSize='32px'
             fontWeight='700'
             color='white'>
-            {pokemonDetail.name}
+            {pokemonName}
           </Text>
           <HStack>
-            {pokemonDetail?.types?.filter((type) => {
-              return(type)
-            }).map((type)=>{
+            {pokemonDetail?.types?.map((type) => {
               return <Image key={type} src={getTypes(type.type.name)} alt='tipo pokémon' />
             })
             }
@@ -103,8 +101,8 @@ const PokemonCard = (props) => {
           <Image
             src={pokemonDetail.sprites?.other['official-artwork'].front_default}
             alt='Imagem Pokemon'
-            w='190px'
-            h='190px'
+            w='200px'
+            h='200px'
             position='absolute'
             zIndex={1}
             marginBottom="50px"
@@ -113,13 +111,15 @@ const PokemonCard = (props) => {
             src={pokeball}
             alt='Imagem Pokebola'
             position='absolute'
-            w={'48'}
+            w='250px'
+            //h={'60'}
+            padding='16px 28px 0px 0px '
           />
 
         </VStack>
       </Flex>
       <Flex
-        w='400px'
+        w='420px'
         h='40px'
         justifyContent='space-between'
         alignItems='center'
@@ -136,7 +136,11 @@ const PokemonCard = (props) => {
         </Text>
 
         {location.pathname === '/' &&
-          <Button onClick={() => addToPokedex(pokemonDetail)}
+          <Button onClick={() => {
+            addToPokedex(pokemonDetail)
+            //setOverlay(<Overlay />)
+            onOpen()
+          }}
             w='146px'
             h='38px'
             fontFamily="'Poppins', sans-serif"
@@ -144,15 +148,12 @@ const PokemonCard = (props) => {
             fontSize='16px'
           >Capturar!</Button>}
 
-        {/* <Modal>
-          <ModalBody>
-            <Text>Gotcha!</Text>
-            <Text>O Pokémon foi adicionado a sua Pokédex</Text>
-          </ModalBody>
-        </Modal> */}
-
         {location.pathname === '/pokedex' &&
-          <Button onClick={() => removePokedex(pokemonDetail)}
+          <Button onClick={() => {
+            removePokedex(pokemonDetail)
+            //setOverlay(<Overlay />)
+            onOpen()
+          }}
             w='146px'
             h='38px'
             fontFamily="'Poppins', sans-serif"
@@ -160,7 +161,86 @@ const PokemonCard = (props) => {
             fontSize='16px'
             colorScheme='red'
           >Excluir</Button>}
+
+        {location.pathname === '/' &&
+          <Modal
+            isCentered
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <ModalOverlay/>
+            {/* {overlay} */}
+            <ModalContent 
+            w='451px'
+            h='222px'
+            borderRadius='12px'
+            alignItems={'center'}
+            >
+            <ModalBody
+              w='400px'
+              h='96px'
+              padding='70px 8px'
+              borderRadius='12px'
+              bg={'white'}
+              fontFamily="'Poppins', sans-serif"
+              fontWeight="700"
+              textAlign={'center'}
+            >
+              <Text
+                fontSize='32px'
+              >
+                Gotcha!
+              </Text>
+              <Text
+                fontSize='16px'
+              >
+                O Pokémon foi adicionado a sua Pokédex
+              </Text>
+            </ModalBody>
+            </ModalContent>
+          </Modal>
+        }
+
+        {location.pathname === '/pokedex' &&
+          <Modal
+            isCentered
+            isOpen={isOpen}
+            onClose={onClose}
+          >
+            <ModalOverlay/>
+            {/* {overlay} */}
+            <ModalContent 
+            w='451px'
+            h='222px'
+            borderRadius='12px'
+            alignItems={'center'}
+            >
+            <ModalBody
+              w='400px'
+              h='96px'
+              padding='70px 8px'
+              borderRadius='12px'
+              bg={'white'}
+              fontFamily="'Poppins', sans-serif"
+              fontWeight="700"
+              textAlign={'center'}
+            >
+              <Text
+              fontSize='32px'
+              >
+                Oh, no!
+              </Text>
+              <Text
+              fontSize='16px'
+              >
+                O Pokémon foi removido da sua Pokédex
+              </Text>
+            </ModalBody>
+            </ModalContent>
+          </Modal>
+        }
       </Flex>
+
     </Flex>
   )
 }

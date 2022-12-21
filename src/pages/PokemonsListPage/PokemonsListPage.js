@@ -16,7 +16,7 @@ const PokemonsListPage = () => {
         w='100%'
         h='100%'
         bg={'gray.600'}
-        padding="40px">
+        padding="40px 32px">
         <Heading
           fontFamily="'Poppins', sans-serif"
           fontWeight="700"
@@ -27,12 +27,14 @@ const PokemonsListPage = () => {
 
         <Grid
           templateColumns='repeat(3, 1fr)'
-          gap={10}
+          rowGap={10}
+          columnGap={4}
           paddingTop='50px'>
           {pokemons.map((pokemon) => {
             return <PokemonCard
               isOnPokemonsListPage={true}
               key={pokemon.name}
+              pokemonName={pokemon.name[0].toUpperCase() + pokemon.name.substring(1)}
               pokemonUrl={pokemon.url}
               addToPokedex={addToPokedex} />
           })}
