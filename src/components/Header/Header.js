@@ -1,5 +1,4 @@
 import {
-  Box,
   Button,
   Flex,
   Grid,
@@ -8,13 +7,17 @@ import {
   Image
 }
 from '@chakra-ui/react'
-import React from 'react'
+import React, { useContext } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import logoPokemon from "../../assets/logoPokemon.png"
 import arrowIcon from "../../assets/arrowIcon.svg"
 import { goToPokedexPage, goToPokemonsListPage } from '../../Router/coordinator'
+import { GlobalContext } from '../../contexts/GlobalStateContext'
 
 const Header = () => {
+  const context = useContext(GlobalContext)
+  const {removePokedex} = context
+
   const navigate = useNavigate()
 
   const location = useLocation()
@@ -78,6 +81,7 @@ const Header = () => {
       {location.pathname === '/pokedex/id' &&
         <GridItem gridColumn={'4 / 5'} gridRow={'2/3'}>
           <Button
+            onClick={()=> removePokedex()}
             colorScheme={'red'}
             w="250px"
             h="74px"

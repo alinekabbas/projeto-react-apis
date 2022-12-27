@@ -10,23 +10,34 @@ const PokedexPage = () => {
 
   return (
     <>
-      <Header/>
-      <Box w='100%' h={1000} bg={'gray.600'} padding="40px">
+      <Header />
+      <Box
+        w='100%'
+        h={1000}
+        bg={'gray.600'}
+        padding="40px 32px"
+      >
         <Heading
           fontFamily="'Poppins', sans-serif"
           fontWeight="700"
           fontSize='32px'
           color={'white'}
         >
-          Meus Pokémons</Heading>
+          Meus Pokémons
+        </Heading>
+
         <Grid
           templateColumns='repeat(3, 1fr)'
-          gap={10}
-          paddingTop='50px'>
-          {pokedex.map((pokemon)=>{
-            return <PokemonCard 
-            key={pokemon.name}
-            removePokedex={removePokedex}
+          rowGap={10}
+          columnGap={4}
+          paddingTop='50px'
+        >
+          {pokedex.map((pokemon) => {
+            return <PokemonCard
+              key={pokemon.name}
+              pokemonName={pokemon.name[0].toUpperCase() + pokemon.name.substring(1)}
+              pokemon={pokemon.name}
+              removePokedex={removePokedex}
             />
           })}
         </Grid>

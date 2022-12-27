@@ -19,33 +19,33 @@ import { useLocation, useNavigate } from 'react-router-dom'
 import { goToPokemonDetailPage } from '../../Router/coordinator'
 import { getTypes } from '../../utils/ReturnPokemonType'
 import { getColors } from '../../utils/ReturnCardColor'
+import PokemonDetailPage from '../../pages/PokemonDetailPage/PokemonDetailPage'
 
 const PokemonCard = (props) => {
   const {
-    pokemonUrl,
+    pokemon,
     pokemonName,
     addToPokedex,
     removePokedex
   } = props
 
-  const [pokemonDetail, setPokemonDetail] = useState({})
+  const [pokemonCards, setPokemonCards] = useState({})
 
   const navigate = useNavigate()
 
   const location = useLocation()
 
   useEffect(() => {
-    getPokemonDetails()
+    getPokemonCards()
   }, [])
 
-  const getPokemonDetails = () => {
-    axios.get(pokemonUrl)
-      .then((response) => {
-        setPokemonDetail(response.data)
-      })
-      .catch((error) => {
-        console.log(error)
-      })
+  const getPokemonCards = async () => {
+    try {
+      const response = await axios.get(`https://pokeapi.co/api/v2/pokemon/${pokemon}/`)
+      setPokemonCards(response.data)
+    } catch (error) {
+      console.log(error)
+    }
   }
 
   const { isOpen, onOpen, onClose } = useDisclosure()
@@ -57,7 +57,7 @@ const PokemonCard = (props) => {
       flexDirection='column'
       borderRadius='20px'
       position='relative'
-      bg={pokemonDetail?.types?.map((type) => {
+      bg={pokemonCards?.types?.map((type) => {
         if (type.slot === 1) {
           return getColors(type.type.name)
         }
@@ -76,7 +76,7 @@ const PokemonCard = (props) => {
             fontSize='16px'
             fontFamily="Inter, sans serif"
             fontWeight='700'
-          >#{pokemonDetail.id}
+          >#{pokemonCards.id}
           </Text>
           <Text
             fontFamily="Inter, sans serif"
@@ -86,7 +86,7 @@ const PokemonCard = (props) => {
             {pokemonName}
           </Text>
           <HStack>
-            {pokemonDetail?.types?.map((type) => {
+            {pokemonCards?.types?.map((type) => {
               return <Image key={type} src={getTypes(type.type.name)} alt='tipo pokémon' />
             })
             }
@@ -99,7 +99,7 @@ const PokemonCard = (props) => {
           padding='16px'
         >
           <Image
-            src={pokemonDetail.sprites?.other['official-artwork'].front_default}
+            src={pokemonCards.sprites?.other['official-artwork'].front_default}
             alt='Imagem Pokemon'
             w='200px'
             h='200px'
@@ -112,7 +112,6 @@ const PokemonCard = (props) => {
             alt='Imagem Pokebola'
             position='absolute'
             w='250px'
-            //h={'60'}
             padding='16px 28px 0px 0px '
           />
 
@@ -133,12 +132,17 @@ const PokemonCard = (props) => {
           color='white'
         >
           Detalhes
+          {/* {pokemonCards.map((pokemon) => {
+            return <PokemonDetailPage
+            key={pokemon.id}
+            pokemon={pokemon.id}
+            />
+          })} */}
         </Text>
 
         {location.pathname === '/' &&
           <Button onClick={() => {
-            addToPokedex(pokemonDetail)
-            //setOverlay(<Overlay />)
+            addToPokedex(pokemonCards)
             onOpen()
           }}
             w='146px'
@@ -150,8 +154,7 @@ const PokemonCard = (props) => {
 
         {location.pathname === '/pokedex' &&
           <Button onClick={() => {
-            removePokedex(pokemonDetail)
-            //setOverlay(<Overlay />)
+            removePokedex(pokemonCards)
             onOpen()
           }}
             w='146px'
@@ -168,35 +171,34 @@ const PokemonCard = (props) => {
             isOpen={isOpen}
             onClose={onClose}
           >
-            <ModalOverlay/>
-            {/* {overlay} */}
-            <ModalContent 
-            w='451px'
-            h='222px'
-            borderRadius='12px'
-            alignItems={'center'}
-            >
-            <ModalBody
-              w='400px'
-              h='96px'
-              padding='70px 8px'
+            <ModalOverlay />
+            <ModalContent
+              w='451px'
+              h='222px'
               borderRadius='12px'
-              bg={'white'}
-              fontFamily="'Poppins', sans-serif"
-              fontWeight="700"
-              textAlign={'center'}
+              alignItems={'center'}
             >
-              <Text
-                fontSize='32px'
+              <ModalBody
+                w='400px'
+                h='96px'
+                padding='70px 8px'
+                borderRadius='12px'
+                bg={'white'}
+                fontFamily="'Poppins', sans-serif"
+                fontWeight="700"
+                textAlign={'center'}
               >
-                Gotcha!
-              </Text>
-              <Text
-                fontSize='16px'
-              >
-                O Pokémon foi adicionado a sua Pokédex
-              </Text>
-            </ModalBody>
+                <Text
+                  fontSize='32px'
+                >
+                  Gotcha!
+                </Text>
+                <Text
+                  fontSize='16px'
+                >
+                  O Pokémon foi adicionado a sua Pokédex
+                </Text>
+              </ModalBody>
             </ModalContent>
           </Modal>
         }
@@ -207,35 +209,34 @@ const PokemonCard = (props) => {
             isOpen={isOpen}
             onClose={onClose}
           >
-            <ModalOverlay/>
-            {/* {overlay} */}
-            <ModalContent 
-            w='451px'
-            h='222px'
-            borderRadius='12px'
-            alignItems={'center'}
-            >
-            <ModalBody
-              w='400px'
-              h='96px'
-              padding='70px 8px'
+            <ModalOverlay />
+            <ModalContent
+              w='451px'
+              h='222px'
               borderRadius='12px'
-              bg={'white'}
-              fontFamily="'Poppins', sans-serif"
-              fontWeight="700"
-              textAlign={'center'}
+              alignItems={'center'}
             >
-              <Text
-              fontSize='32px'
+              <ModalBody
+                w='400px'
+                h='96px'
+                padding='70px 8px'
+                borderRadius='12px'
+                bg={'white'}
+                fontFamily="'Poppins', sans-serif"
+                fontWeight="700"
+                textAlign={'center'}
               >
-                Oh, no!
-              </Text>
-              <Text
-              fontSize='16px'
-              >
-                O Pokémon foi removido da sua Pokédex
-              </Text>
-            </ModalBody>
+                <Text
+                  fontSize='32px'
+                >
+                  Oh, no!
+                </Text>
+                <Text
+                  fontSize='16px'
+                >
+                  O Pokémon foi removido da sua Pokédex
+                </Text>
+              </ModalBody>
             </ModalContent>
           </Modal>
         }
