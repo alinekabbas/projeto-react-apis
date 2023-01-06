@@ -10,7 +10,7 @@ import {
   ModalContent,
   ModalOverlay,
   Text,
-  useDisclosure
+  useDisclosure,
 }
   from '@chakra-ui/react'
 import React, { useContext } from 'react'
@@ -20,9 +20,11 @@ import arrowIcon from "../assets/arrowIcon.svg"
 import { goToPokedexPage, goToPokemonsListPage } from '../Router/coordinator'
 import { GlobalContext } from '../contexts/GlobalStateContext'
 
-const Header = () => {
+const Header = (props) => {
+  const { pokemonDetail } = props
+
   const context = useContext(GlobalContext)
-  const { addToPokedex, removePokedex } = context
+  const { pokedex, addToPokedex, removePokedex, activeModal, setActiveModal } = context
 
   const navigate = useNavigate()
 
@@ -30,10 +32,107 @@ const Header = () => {
 
   const { namePokemon } = useParams()
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { onOpen, isOpen, onClose } = useDisclosure()
+
+  function renderButton() {
+    const isAlreadyOnPokedex = pokedex.find(
+      (pokemonInPokedex) => pokemonInPokedex.name === pokemonDetail.name
+    )
+    if (!isAlreadyOnPokedex) {
+      return (<Button
+        onClick={() => {
+          setActiveModal(1)
+          addToPokedex(pokemonDetail)
+          onOpen(true)
+        }}
+        colorScheme={'blue'}
+        w="250px"
+        h="74px"
+        padding="4px 20px"
+        fontFamily="'Poppins', sans-serif"
+        fontWeight="400"
+        fontSize='12px'
+        cursor={'pointer'}
+      >Adicionar a Pokédex</Button>
+      )
+    } else {
+      return (<Button
+        onClick={() => {
+          setActiveModal(2)
+          removePokedex(pokemonDetail)
+          onOpen(true)
+        }}
+        colorScheme={'red'}
+        w="250px"
+        h="74px"
+        padding="4px 20px"
+        fontFamily="'Poppins', sans-serif"
+        fontWeight="400"
+        fontSize='12px'
+        cursor={'pointer'}
+      >Excluir da Pokédex</Button>)
+    }
+  }
+
+  const renderModalTypes = () => {
+    if (activeModal === 1) {
+      return <>
+        <Text
+          fontSize='32px'
+        >
+          Gotcha!
+        </Text>
+        <Text
+          fontSize='16px'
+        >
+          O Pokémon foi adicionado a sua Pokédex
+        </Text>
+      </>
+    } else {
+      return <>
+        <Text
+          fontSize='32px'
+        >
+          Oh, no!
+        </Text>
+        <Text
+          fontSize='16px'
+        >
+          O Pokémon foi removido da sua Pokédex
+        </Text>
+      </>
+    }
+  }
 
   return (
     <>
+      <Modal
+        isCentered
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent
+          w='451px'
+          h='222px'
+          borderRadius='12px'
+          alignItems={'center'}
+        >
+          <ModalBody
+            w='400px'
+            h='96px'
+            padding='70px 8px'
+            borderRadius='12px'
+            bg={'white'}
+            fontFamily="'Poppins', sans-serif"
+            fontWeight="700"
+            textAlign={'center'}
+          >
+            {renderModalTypes()}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
       <Grid
         w="100%" h={40}
         templateColumns='repeat(8, 1fr)'
@@ -93,71 +192,10 @@ const Header = () => {
           </GridItem>}
 
         {location.pathname === `/pokemon/detalhes/${namePokemon}` &&
-          <GridItem gridColumn={'7 / 8'} gridRow={'2/3'}>
-            <Button
-              onClick={() => addToPokedex()}
-              colorScheme={'blue'}
-              w="125px"
-              h="74px"
-              padding="4px 20px"
-              fontFamily="'Poppins', sans-serif"
-              fontWeight="400"
-              fontSize='12px'
-              cursor={'pointer'}
-            >Adicionar a Pokédex</Button>
-          </GridItem>}
-
-        {location.pathname === `/pokemon/detalhes/${namePokemon}` &&
-          <GridItem gridColumn={'8 / 9'} gridRow={'2/3'}>
-            <Button
-              onClick={() => removePokedex()}
-              colorScheme={'red'}
-              w="125px"
-              h="74px"
-              padding="4px 20px"
-              fontFamily="'Poppins', sans-serif"
-              fontWeight="400"
-              fontSize='12px'
-              cursor={'pointer'}
-            >Excluir da Pokédex</Button>
+          <GridItem gridColumn={'7 / 9'} gridRow={'2/3'}>
+            {renderButton(pokemonDetail)}
           </GridItem>}
       </Grid>
-
-      <Modal
-        isCentered
-        isOpen={isOpen}
-        onClose={onClose}
-      >
-        <ModalOverlay />
-        <ModalContent
-          w='451px'
-          h='222px'
-          borderRadius='12px'
-          alignItems={'center'}
-        >
-          <ModalBody
-            w='400px'
-            h='96px'
-            padding='70px 8px'
-            borderRadius='12px'
-            bg={'white'}
-            fontFamily="'Poppins', sans-serif"
-            fontWeight="700"
-            textAlign={'center'}
-          >
-            <Text
-              fontSize='32px'
-            >
-              Gotcha!
-            </Text>
-            <Text
-              fontSize='16px'
-            >
-              O Pokémon foi adicionado a sua Pokédex
-            </Text>
-          </ModalBody>
-        </ModalContent>
-      </Modal>
     </>
   )
 }

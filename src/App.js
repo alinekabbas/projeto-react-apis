@@ -6,11 +6,12 @@ import { GlobalContext } from './contexts/GlobalStateContext'
 import axios from 'axios'
 import PokemonCard from './components/PokemonCard';
 
-function App() {
+const App = () => {
 
   const [pokemons, setPokemons] = useState([])
   const [pokedex, setPokedex] = useState([])
-  
+  const [activeModal, setActiveModal] = useState(1)
+
   useEffect(() => {
     getPokemons()
   }, [])
@@ -50,14 +51,9 @@ function App() {
     const newPokedex = pokedex.filter((pokemonInPokedex) => pokemonInPokedex.name !== pokemonToRemove.name)
     window.localStorage.removeItem('pokedex')
     setPokedex(newPokedex)
-    
   }
 
-  const renderPokemonList = pokemons.filter((pokemonInList) =>
-      !pokedex.find(
-        (pokemonInPokedex) => pokemonInList.name === pokemonInPokedex.name
-      )
-  ).map((pokemon) => {
+  const renderPokemonList = pokemons.map((pokemon) => {
     return <PokemonCard
       key={pokemon.url}
       pokemonName={pokemon.name[0].toUpperCase() + pokemon.name.substring(1)}
@@ -74,33 +70,26 @@ function App() {
     />
   })
 
-  const pokemonName = pokemons.map((pokemon)=>{
-    return pokemon.name[0].toUpperCase() + pokemon.name.substring(1)
-  })
-
   const context = {
-    pokemons: pokemons,
-    setPokemons: setPokemons,
-    pokedex: pokedex,
-    setPokedex: setPokedex,
-    addToPokedex: addToPokedex,
-    removePokedex: removePokedex,
-    renderPokemonList: renderPokemonList,
-    renderPokedex: renderPokedex,
-    pokemonName: pokemonName
+    pokemons,
+    setPokemons,
+    pokedex,
+    setPokedex,
+    addToPokedex,
+    removePokedex,
+    renderPokemonList,
+    renderPokedex,
+    activeModal,
+    setActiveModal
   }
 
   return (
-
     <GlobalContext.Provider value={context}>
       <ChakraProvider>
         <Router />
       </ChakraProvider>
       <GlobalStyle />
     </GlobalContext.Provider>
-
-
-  );
+  )
 }
-
 export default App;
