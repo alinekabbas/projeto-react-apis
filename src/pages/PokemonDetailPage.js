@@ -38,7 +38,6 @@ const PokemonDetailPage = () => {
     }
   }
 
-
   const moviePokemon = pokemonDetail?.moves?.slice(0, 4)
   const renderMoviePokemon = moviePokemon?.map((move) => {
     return <Flex
@@ -54,9 +53,11 @@ const PokemonDetailPage = () => {
     </Flex>
   })
 
+  const totalStat = pokemonDetail?.stats?.reduce((acc, stat) => acc + stat.base_stat, 0)
+ 
   return (
     <>
-      <Header />
+      <Header pokemonDetail={pokemonDetail}/>
       <Box
         w='100%'
         h={1000}
@@ -148,13 +149,9 @@ const PokemonDetailPage = () => {
                     })}
                   </Grid>
                   <Text>Total</Text>
-                  {/* <Flex>
-                  {
-                    pokemonDetail?.stats?.map((stat) => {
-                      let total = 0
-                      return total += Number(stat.base_stat)
-                    })
-                  }</Flex> */}
+                  <Text>
+                  {totalStat}
+                  </Text>
                 </Grid>
               </VStack>
             </Flex>
@@ -210,7 +207,7 @@ const PokemonDetailPage = () => {
                     fontWeight="800"
                     fontSize='24px'
                   >
-                    Movies
+                    Moves:
                   </Flex>
                   <Flex
                     w='252px'

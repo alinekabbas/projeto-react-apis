@@ -12,13 +12,14 @@ import {
   VStack
 }
   from '@chakra-ui/react'
-import React, { useEffect, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import axios from 'axios'
 import pokeball from '../assets/pngwing2.png'
-import { useLocation, useNavigate, useParams } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 import { goToPokemonDetailPage } from '../Router/coordinator'
 import { getTypes } from '../utils/ReturnPokemonType'
 import { getColors } from '../utils/ReturnCardColor'
+import { GlobalContext } from '../contexts/GlobalStateContext'
 
 const PokemonCard = (props) => {
   const {
@@ -27,6 +28,9 @@ const PokemonCard = (props) => {
     addToPokedex,
     removePokedex,
   } = props
+
+  const context = useContext(GlobalContext)
+  const { activeModal, setActiveModal } = context
 
   const [pokemonCards, setPokemonCards] = useState({})
 
@@ -47,10 +51,67 @@ const PokemonCard = (props) => {
     }
   }
 
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { onOpen, isOpen, onClose } = useDisclosure()
+
+  const renderModalTypes = () => {
+    if (activeModal === 1) {
+      return <>
+        <Text
+          fontSize='32px'
+        >
+          Gotcha!
+        </Text>
+        <Text
+          fontSize='16px'
+        >
+          O Pokémon foi adicionado a sua Pokédex
+        </Text>
+      </>
+    } else {
+      return <>
+        <Text
+          fontSize='32px'
+        >
+          Oh, no!
+        </Text>
+        <Text
+          fontSize='16px'
+        >
+          O Pokémon foi removido da sua Pokédex
+        </Text>
+      </>
+    }
+  }
 
   return (
     <>
+      <Modal
+        isCentered
+        isOpen={isOpen}
+        onClose={onClose}
+      >
+        <ModalOverlay />
+        <ModalContent
+          w='451px'
+          h='222px'
+          borderRadius='12px'
+          alignItems={'center'}
+        >
+          <ModalBody
+            w='400px'
+            h='96px'
+            padding='70px 8px'
+            borderRadius='12px'
+            bg={'white'}
+            fontFamily="'Poppins', sans-serif"
+            fontWeight="700"
+            textAlign={'center'}
+          >
+            {renderModalTypes()}
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+
       {(location.pathname === '/' || location.pathname === '/pokedex') &&
         <Flex
           w='420px'
@@ -77,7 +138,7 @@ const PokemonCard = (props) => {
                 fontSize='16px'
                 fontFamily="Inter, sans serif"
                 fontWeight='700'
-              >{pokemonCards?.id <=9 ? <Text>#0{pokemonCards?.id}</Text>: <Text>#{pokemonCards?.id}</Text>}
+              >{pokemonCards?.id <= 9 ? <Text>#0{pokemonCards?.id}</Text> : <Text>#{pokemonCards?.id}</Text>}
               </Text>
               <Text
                 fontFamily="Inter, sans serif"
@@ -141,7 +202,8 @@ const PokemonCard = (props) => {
             {location.pathname === '/' &&
               <Button onClick={() => {
                 addToPokedex(pokemonCards)
-                onOpen()
+                setActiveModal(1)
+                onOpen(true)
               }}
                 w='146px'
                 h='38px'
@@ -154,8 +216,9 @@ const PokemonCard = (props) => {
             {location.pathname === '/pokedex' &&
               <Button
                 onClick={() => {
-                  onOpen()
+                  setActiveModal(2)
                   removePokedex(pokemonCards)
+                  onOpen(true)
                 }}
                 w='146px'
                 h='38px'
@@ -165,248 +228,10 @@ const PokemonCard = (props) => {
                 colorScheme='red'
                 cursor={'pointer'}
               >Excluir </Button>}
-
-            {location.pathname === '/' &&
-              <Modal
-                isCentered
-                isOpen={isOpen}
-                onClose={onClose}
-              >
-                <ModalOverlay />
-                <ModalContent
-                  w='451px'
-                  h='222px'
-                  borderRadius='12px'
-                  alignItems={'center'}
-                >
-                  <ModalBody
-                    w='400px'
-                    h='96px'
-                    padding='70px 8px'
-                    borderRadius='12px'
-                    bg={'white'}
-                    fontFamily="'Poppins', sans-serif"
-                    fontWeight="700"
-                    textAlign={'center'}
-                  >
-                    <Text
-                      fontSize='32px'
-                    >
-                      Gotcha!
-                    </Text>
-                    <Text
-                      fontSize='16px'
-                    >
-                      O Pokémon foi adicionado a sua Pokédex
-                    </Text>
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
-            }
-
-            {location.pathname === '/pokedex' &&
-              <Modal
-                isCentered
-                isOpen={isOpen}
-                onClose={onClose}
-              >
-                <ModalOverlay />
-                <ModalContent
-                  w='451px'
-                  h='222px'
-                  borderRadius='12px'
-                  alignItems={'center'}
-                >
-                  <ModalBody
-                    w='400px'
-                    h='96px'
-                    padding='70px 8px'
-                    borderRadius='12px'
-                    bg={'white'}
-                    fontFamily="'Poppins', sans-serif"
-                    fontWeight="700"
-                    textAlign={'center'}
-                  >
-                    <Text
-                      fontSize='32px'
-                    >
-                      Oh, no!
-                    </Text>
-                    <Text
-                      fontSize='16px'
-                    >
-                      O Pokémon foi removido da sua Pokédex
-                    </Text>
-                  </ModalBody>
-                </ModalContent>
-              </Modal>
-            }
           </Flex>
         </Flex>
       }
 
-
-      {/* {location.pathname === `/pokemon/detalhes/${namePokemon}` &&
-        <Flex
-          w='1270px'
-          h='663px'
-          borderRadius='12px'
-          bg={pokemonCards?.types?.map((type) => {
-            if (type.slot === 1) {
-              return getColors(type.type.name)
-            }
-          })}
-          padding='25px 0px 25px 30px'
-          justifyContent='space-between'
-
-        >
-          <Flex
-            h='613px'
-            w='300px'
-            flexDirection='column'
-            justifyContent='space-between'
-          >
-            <Image src={pokemonCards?.sprites?.front_default} alt='imagem pokémon' borderRadius='8px' bg={'white'} />
-            <Image src={pokemonCards?.sprites?.back_default} alt='imagem pokémon' borderRadius='8px' bg={'white'} />
-          </Flex>
-          <Flex
-            w='300px'
-            h='613px'
-            borderRadius='12px'
-            bg={'white'}
-            justifyContent='center'
-          >
-            <VStack
-              w='280px'
-              h='257px'
-              flexDirection='column'
-              fontSize='12px'
-              fontFamily="Poppins, sans serif"
-              padding='20px'
-            >
-              <Flex
-                fontWeight='700'
-                fontSize='24px'
-                w='280px'
-                justifyContent='start'
-              >Base Stats
-              </Flex>
-              <Grid
-                w='300px'
-                padding='10px'
-                templateColumns='1fr 0.5fr 2fr'
-                alignItems='center'
-              >
-                <Text>
-                  {pokemonCards?.stats?.map((stat) => {
-                    return <GridItem>{getStats(stat.stat.name)}</GridItem>
-                  })}
-                </Text>
-                <Text>
-                  {pokemonCards?.stats?.map((stat) => {
-                    return <GridItem>{stat.base_stat}</GridItem>
-                  })}
-                </Text>
-                <Progress
-                  colorScheme={pokemonCards?.stats?.map((stat) => {
-                    return <GridItem>{getStatsColor(stat.stat.name)}</GridItem>
-                  })}
-                  value={
-                    pokemonCards?.stats?.map((stat) => {
-                      return stat.base_stat
-                    })
-                  }
-                  borderRadius='4px' />
-                <Text>Total</Text>
-                <Text>
-                  {
-                    pokemonCards?.stats?.map((stat) => {
-                      let total = 0
-                      return total += stat.base_stat
-                    })
-                  }</Text>
-              </Grid>
-            </VStack>
-          </Flex>
-          <Flex >
-            <Image
-              src={pokeballBig}
-              alt='pokebola'
-              position='absolute'
-              w='600px'
-              h='663px'
-              padding='0px 0px 24px 10px'
-
-            />
-            <Flex
-              w='300px'
-              h='613px'
-              flexDirection='column'
-              justifyContent='space-between'
-              position='relative'
-            >
-              <Text
-                color='white'
-                fontSize='16px'
-                fontFamily="Inter, sans serif"
-                fontWeight='700'
-              >
-                #{pokemonCards.id}
-              </Text>
-              <Text
-                fontFamily="Inter, sans serif"
-                fontSize='32px'
-                fontWeight='700'
-                color='white'
-              >
-                {pokemonName}
-              </Text>
-              <HStack>
-                {pokemonCards?.types?.map((type) => {
-                  return <Image key={type} src={getTypes(type.type.name)} alt='tipo pokémon' />
-                })
-                }
-              </HStack>
-              <VStack
-                w='292px'
-                h='453px'
-                borderRadius='8px'
-                bg={'white'}
-              >
-                <Flex
-                  w='250px'
-                  paddingTop='16px'
-                  fontFamily="'Inter', sans-serif"
-                  fontWeight="800"
-                  fontSize='24px'
-                >
-                  Movies
-                </Flex>
-                <Flex 
-                w='252px'
-                h='200px'
-                flexDirection='column'
-                justifyContent='space-between'
-                alignItems='flex-start'
-                >
-                  {renderMoviePokemon}
-                </Flex>
-              </VStack>
-            </Flex>
-            <Flex
-              w='300px'
-              h='613px'>
-              <Image
-                src={pokemonCards?.sprites?.other['official-artwork'].front_default}
-                alt='imagem pokémon'
-                w='270px'
-                h='270px'
-                zIndex={1}
-              />
-            </Flex>
-          </Flex>
-        </Flex>
-      } */}
     </>
   )
 }
