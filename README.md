@@ -7,18 +7,19 @@ Este projeto teve como fonte de dados para a sua criação a [Poke Api](https://
 
 ## Índice
 
-- <a href="#funcionalidades">Funcionalidades do Projeto</a>
-- <a href="#layout">Layout</a>
-- <a href="#demonstração">Demonstração</a>
-- <a href="#tecnologias">Tecnologias Utilizadas</a>
-- <a href="#contato">Meu Contato</a>
+- [Funcionalizades do Projeto](#⚙️-funcionalidades-do-projeto)
+- [Layout](#💻-layout)
+- [Demonstração](#💻-demonstração)
+- [Tecnologias Utilizadas](#👩🏽‍💻-tecnologias-utilizadas)
+- [Contato](#👩🏽‍🦱-meu-contato)
+
 
 ## ⚙️ Funcionalidades do Projeto
 
-- [x] Capturar pokémons
+- [x] Capturar Pokémons
 - [x] Adicioná-los à Pokédex
 - [x] Removê-los da Pokédex
-- [x] Vizualizar os detalhes dos Pokémons
+- [x] Visualizar os detalhes dos Pokémons
 
 ## 💻 Layout
 
@@ -38,9 +39,10 @@ Este projeto teve como fonte de dados para a sua criação a [Poke Api](https://
 - Axios
 - Chakra UI
 
-## 👩🏽‍🦱 Meu Contato
+## 👩🏽‍🦱 Contato
 
-[Linkedin](https://www.linkedin.com/in/aline-kabbas/)
+<a href="https://www.linkedin.com/in/aline-kabbas/" target="_blank"><img src="https://img.shields.io/badge/-LinkedIn-%230077B5?style=for-the-badge&logo=linkedin&logoColor=white" target="_blank"></a>
+<a href = "mailto:alinekabbas@gmail.com"><img src="https://img.shields.io/badge/Gmail-D14836?style=for-the-badge&logo=gmail&logoColor=white" target="_blank"></a>
 
 
 
