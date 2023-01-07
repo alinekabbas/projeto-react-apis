@@ -7,7 +7,7 @@ Este projeto teve como fonte de dados para a sua criação a [Poke Api](https://
 
 ## Índice
 
-- [Funcionalizades do Projeto](#⚙️-funcionalidades-do-projeto)
+- [Funcionalidades do Projeto](#⚙️-funcionalidades-do-projeto)
 - [Layout](#💻-layout)
 - [Demonstração](#💻-demonstração)
 - [Tecnologias Utilizadas](#👩🏽‍💻-tecnologias-utilizadas)
